@@ -13,6 +13,30 @@ class EntryDetailViewController: UIViewController {
     
     @IBOutlet weak var journaltitleEntry: UITextField!
     @IBOutlet weak var journalBodyEntry: UITextView!
+    @IBAction func saveTapped(_ sender: Any) {
+        guard let entryController = entryController,
+            let title = journaltitleEntry.text, !title.isEmpty,
+            let body = journalBodyEntry.text
+            else { return }
+        
+        if let entry = entry {
+            entryController.updateEntry(entry: entry, newTitle: title, newBody: body)
+        } else {
+            entryController.createEntry(title: title, bodyText: body)
+        }
+        
+        navigationController?.popViewController(animated: true)
+    }
+    
+    var entryController: EntryController?
+    var entry: Entry?
+    
+    func updateViews() {
+        guard isViewLoaded else { return }
+        title = entry?.title ?? "Create Journal Entry"
+        journaltitleEntry.text = entry?.title ?? ""
+        journalBodyEntry.text = entry?.bodyText ?? ""
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,15 +44,6 @@ class EntryDetailViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
 }

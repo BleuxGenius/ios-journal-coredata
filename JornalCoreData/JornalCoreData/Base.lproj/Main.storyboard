@@ -106,7 +106,11 @@
                         <viewLayoutGuide key="safeArea" id="Yhy-bB-yhB"/>
                     </view>
                     <navigationItem key="navigationItem" id="csM-3V-sCv">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="7ds-Ci-aMw"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="7ds-Ci-aMw">
+                            <connections>
+                                <action selector="saveTapped:" destination="iuI-Of-83u" id="Sgh-fE-jwg"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="journalBodyEntry" destination="uVA-Xl-W18" id="tsj-lq-YYg"/>
@@ -137,6 +141,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Qiy-mp-8Bw"/>
+        <segue reference="Y4E-2H-j3V"/>
     </inferredMetricsTieBreakers>
 </document>
