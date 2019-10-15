@@ -13,6 +13,7 @@ class EntryDetailViewController: UIViewController {
     
     @IBOutlet weak var journaltitleEntry: UITextField!
     @IBOutlet weak var journalBodyEntry: UITextView!
+    
     @IBAction func saveTapped(_ sender: Any) {
         guard let entryController = entryController,
             let title = journaltitleEntry.text, !title.isEmpty,
