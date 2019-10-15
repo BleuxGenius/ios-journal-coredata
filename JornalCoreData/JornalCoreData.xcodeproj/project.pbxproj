@@ -18,6 +18,7 @@
 		E57C8C1F2355366B00E4C3C4 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C8C1E2355366B00E4C3C4 /* CoreDataStack.swift */; };
 		E57C8C232355371500E4C3C4 /* JornalCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E57C8C212355371500E4C3C4 /* JornalCoreData.xcdatamodeld */; };
 		E57C8C2523553A5400E4C3C4 /* Entry+Convience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C8C2423553A5400E4C3C4 /* Entry+Convience.swift */; };
+		E5C7D860235666CC005D5A9E /* Entry Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C7D85F235666CC005D5A9E /* Entry Controller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		E57C8C1E2355366B00E4C3C4 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		E57C8C222355371500E4C3C4 /* JornalCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JornalCoreData.xcdatamodel; sourceTree = "<group>"; };
 		E57C8C2423553A5400E4C3C4 /* Entry+Convience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry+Convience.swift"; sourceTree = "<group>"; };
+		E5C7D85F235666CC005D5A9E /* Entry Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry Controller.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				E57C8C0B2355181400E4C3C4 /* Assets.xcassets */,
 				E57C8C0D2355181400E4C3C4 /* LaunchScreen.storyboard */,
 				E57C8C102355181400E4C3C4 /* Info.plist */,
+				E5C7D85E235666B0005D5A9E /* Model Controller */,
 				E57C8C20235536EB00E4C3C4 /* Model */,
 			);
 			path = JornalCoreData;
@@ -104,6 +107,14 @@
 				E57C8C212355371500E4C3C4 /* JornalCoreData.xcdatamodeld */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		E5C7D85E235666B0005D5A9E /* Model Controller */ = {
+			isa = PBXGroup;
+			children = (
+				E5C7D85F235666CC005D5A9E /* Entry Controller.swift */,
+			);
+			path = "Model Controller";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,6 +196,7 @@
 				E57C8C1D235529EA00E4C3C4 /* EntryDetailViewController.swift in Sources */,
 				E57C8C052355181100E4C3C4 /* SceneDelegate.swift in Sources */,
 				E57C8C2523553A5400E4C3C4 /* Entry+Convience.swift in Sources */,
+				E5C7D860235666CC005D5A9E /* Entry Controller.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

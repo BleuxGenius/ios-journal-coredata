@@ -14,5 +14,13 @@ extension Entry {
 //    This initializer sets up the Core Data (NSManagedObject) part of the Task,
 //    then gives is the properties unique Task entity
     
-    convenience init
+    convenience init(title: String, bodyText: String, identifier: String?, timestamp: Date, context: NSManagedObjectContext) {
+        
+        self.init(context: context)
+        
+        self.title = title
+        self.bodyText = bodyText
+        self.identifier = identifier
+        self.timestamp = timestamp
+    }
 }
