@@ -124,6 +124,8 @@
                     <connections>
                         <outlet property="journalBodyEntry" destination="uVA-Xl-W18" id="tsj-lq-YYg"/>
                         <outlet property="journaltitleEntry" destination="8t5-0Z-egZ" id="N3n-JK-FFw"/>
+                        <outlet property="moodSegmentedControl" destination="fvw-rL-j7h" id="fq8-tQ-hgX"/>
+                        <outlet property="saveButton" destination="7ds-Ci-aMw" id="z5y-kZ-XRl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NEJ-R6-RE4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
