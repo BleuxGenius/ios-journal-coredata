@@ -12,7 +12,6 @@ class EntriesTableViewController: UITableViewController {
     
 //    constant
     let entryController = EntryController()
-    
     lazy var fetchedResultsController: NSFetchedResultsController<Entry> = {
         
         let fetchRequest: NSFetchRequest<Entry> = Entry.fetchRequest()
@@ -23,6 +22,7 @@ class EntriesTableViewController: UITableViewController {
         
         let moc = CoreDataStack.shared.mainContext
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: moc, sectionNameKeyPath: "mood", cacheName: nil)
+        ftc.delegate = self
         try! frc.performFetch()
         return frc
     }()
@@ -30,34 +30,32 @@ class EntriesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchedResultsController.delegate = self
 
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
+        super.viewWillAppear(animated)
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        
     }
 
     // MARK: - Table view data source
 
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return fetchedResultsController.sections?.count ?? 1
+    }
 
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        guard let sectionInfo = fetchedResultsController.sections?[section].name else {return nil}
+        return sectionInfo.title
+    }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return fetchedResultsController.sections?[section].numberOfObjects ?? 0
     }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return fetchedResultsController.sections?.count ?? 1
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let sectionInfo = fetchedResultsController.sections?[section].name else {return nil}
-        return sectionInfo
-    }
-    
-    
-    
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "EntryCell", for: indexPath) as? EntryTableViewCell else {
             return UITableViewCell() }
@@ -70,19 +68,15 @@ class EntriesTableViewController: UITableViewController {
         if editingStyle == .delete {
             // Delete the row from the data source
             let entry = fetchedResultsController.object(at: indexPath)
-            let moc = CoreDataStack.shared.mainContext
-            moc.delete(entry)
-            do {
-                
-                try moc.save()
-            } catch {
-                moc.reset()
-                print("Error deleting Entry from CoreData Persistent Store: \(error)")
+            entryController.deletedEntry(entry: entry) { _ in
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
-//                    } else if editingStyle == .insert {
-//            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-       }
+    }
+//              else if editingStyle == .insert {
+//           Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         
         override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
             return 100
@@ -95,22 +89,22 @@ class EntriesTableViewController: UITableViewController {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
         if segue.identifier == "ShowJournalEntry" {
-            if let vc = segue.destination as? EntryDetailViewController,
-                let indexPath = tableView.indexPathForSelectedRow {
-            vc.entryController = entryController
-            vc.entry = fetchedResultsController.object(at: indexPath)
+            guard let vc = segue.destination as? EntryDetailViewController,
+                let indexPath = tableView.indexPathForSelectedRow
+            else {
+                return
             }
-            
+            vc.entry = fetchedResultsController.object(at: indexPath)
+            vc.entryController = entryController
         } else if segue.identifier == "AddJournalEntry" {
-            if let vc = segue.destination as? EntryDetailViewController {
+            guard let vc = segue.destination as? EntryDetailViewController else { return }
                 vc.entryController = entryController
             }
         }
     }
-}
 extension EntriesTableViewController: NSFetchedResultsControllerDelegate {
      
-    func controllerWillChangeContent(_ controllwe: NSFetchedResultsController<NSFetchRequestResult>) {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.beginUpdates()
     }
     
@@ -130,41 +124,25 @@ extension EntriesTableViewController: NSFetchedResultsControllerDelegate {
         }
         
     }
-    
-    func controller(_ controller: NSFetchedResultController<NSFetchedRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type:
-        NSFetchedResultsChangeType) {
-        
-        switch type {
             
-        case .insert:
-            tableView.insertSections(IndexSet(integer: sectionIndex), with: .right)
-        case .delete:
-            tableView.deleteSections(IndexSet(integer: sectionIndex), with: .left)
-        default:
-            break
-        }
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: indexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        // newIndexPath is option because you'll only get it for insert and move
+
         switch type {
         case .insert:
             guard let newIndexPath = newIndexPath else { return }
             tableView.insertRows(at: [newIndexPath], with: .automatic)
-        case .delete:
-            guard let indexPath = indexPath else { return }
-            tableView.deleteRows(at: [indexPath], with: .left)
+        case .update: guard let indexPath = indexPath else { return }
+        tableView.reloadRows(at: [indexPath], with: .automatic)
         case .move:
             guard let oldIndexPath = indexPath, let newIndexPath = newIndexPath else { return }
-            tableView.moveRows(at: oldIndexPath, to: newIndexPath)
-        case .update:
+            tableView.moveRow(at: oldIndexPath, to: newIndexPath)
+        case .delete:
             guard let indexPath = indexPath else { return }
-            tableView.reloadsRows(at: [indexPath], with: .automatic)
-        @unknown default:
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        default:
             break
-            
         }
-        
     }
-    
 }

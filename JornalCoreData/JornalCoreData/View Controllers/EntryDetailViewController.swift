@@ -7,23 +7,7 @@
 //
 
 import UIKit
-
-enum Moods: Int, CaseIterable {
-    case sad = 0
-    case happy = 1
-    case crazy = 2
-    
-    var moodName: String {
-        switch self {
-        case .sad:
-            return "😞"
-        case .happy:
-            return "😃"
-        case .crazy:
-            return "🙃"
-        }
-    }
-}
+import CoreData
 
 class EntryDetailViewController: UIViewController {
     
@@ -68,7 +52,7 @@ class EntryDetailViewController: UIViewController {
         if let entry = entry {
             entryController?.updateEntry(title: title, bodyText: bodyText, mood: mood.moodName, entry: entry)
         } else {
-            entryController?.createEntry(title: title, bodyText: bodyText, mood: mood.moodName)
+            entryController?.createEntry(title: title, bodyText: bodyText, mood: mood.moodStringValue)
         }
         
         navigationController?.popViewController(animated: true)

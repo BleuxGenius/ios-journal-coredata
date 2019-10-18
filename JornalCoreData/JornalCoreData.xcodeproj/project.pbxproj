@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E572C82523584C32002F8A65 /* JournalEntryRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E572C82423584C32002F8A65 /* JournalEntryRepresentation.swift */; };
 		E57C8C032355181100E4C3C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C8C022355181100E4C3C4 /* AppDelegate.swift */; };
 		E57C8C052355181100E4C3C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C8C042355181100E4C3C4 /* SceneDelegate.swift */; };
 		E57C8C0A2355181100E4C3C4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E57C8C082355181100E4C3C4 /* Main.storyboard */; };
@@ -17,11 +18,13 @@
 		E57C8C1D235529EA00E4C3C4 /* EntryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C8C1C235529EA00E4C3C4 /* EntryDetailViewController.swift */; };
 		E57C8C1F2355366B00E4C3C4 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C8C1E2355366B00E4C3C4 /* CoreDataStack.swift */; };
 		E57C8C232355371500E4C3C4 /* JornalCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E57C8C212355371500E4C3C4 /* JornalCoreData.xcdatamodeld */; };
-		E57C8C2523553A5400E4C3C4 /* Entry+Convience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C8C2423553A5400E4C3C4 /* Entry+Convience.swift */; };
+		E57C8C2523553A5400E4C3C4 /*  Entry+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C8C2423553A5400E4C3C4 /*  Entry+Convenience.swift */; };
 		E5C7D860235666CC005D5A9E /* Entry Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C7D85F235666CC005D5A9E /* Entry Controller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E572C82323584531002F8A65 /* JornalCoreData 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "JornalCoreData 2.xcdatamodel"; sourceTree = "<group>"; };
+		E572C82423584C32002F8A65 /* JournalEntryRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryRepresentation.swift; sourceTree = "<group>"; };
 		E57C8BFF2355181100E4C3C4 /* JornalCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JornalCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E57C8C022355181100E4C3C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E57C8C042355181100E4C3C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -34,7 +37,7 @@
 		E57C8C1C235529EA00E4C3C4 /* EntryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryDetailViewController.swift; sourceTree = "<group>"; };
 		E57C8C1E2355366B00E4C3C4 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		E57C8C222355371500E4C3C4 /* JornalCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JornalCoreData.xcdatamodel; sourceTree = "<group>"; };
-		E57C8C2423553A5400E4C3C4 /* Entry+Convience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry+Convience.swift"; sourceTree = "<group>"; };
+		E57C8C2423553A5400E4C3C4 /*  Entry+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " Entry+Convenience.swift"; sourceTree = "<group>"; };
 		E5C7D85F235666CC005D5A9E /* Entry Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entry Controller.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -103,8 +106,9 @@
 			isa = PBXGroup;
 			children = (
 				E57C8C1E2355366B00E4C3C4 /* CoreDataStack.swift */,
-				E57C8C2423553A5400E4C3C4 /* Entry+Convience.swift */,
+				E57C8C2423553A5400E4C3C4 /*  Entry+Convenience.swift */,
 				E57C8C212355371500E4C3C4 /* JornalCoreData.xcdatamodeld */,
+				E572C82423584C32002F8A65 /* JournalEntryRepresentation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -188,6 +192,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E572C82523584C32002F8A65 /* JournalEntryRepresentation.swift in Sources */,
 				E57C8C1A235528ED00E4C3C4 /* EntryTableViewCell.swift in Sources */,
 				E57C8C1823551C9900E4C3C4 /* EntriesTableViewController.swift in Sources */,
 				E57C8C032355181100E4C3C4 /* AppDelegate.swift in Sources */,
@@ -195,7 +200,7 @@
 				E57C8C232355371500E4C3C4 /* JornalCoreData.xcdatamodeld in Sources */,
 				E57C8C1D235529EA00E4C3C4 /* EntryDetailViewController.swift in Sources */,
 				E57C8C052355181100E4C3C4 /* SceneDelegate.swift in Sources */,
-				E57C8C2523553A5400E4C3C4 /* Entry+Convience.swift in Sources */,
+				E57C8C2523553A5400E4C3C4 /*  Entry+Convenience.swift in Sources */,
 				E5C7D860235666CC005D5A9E /* Entry Controller.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -399,6 +404,7 @@
 		E57C8C212355371500E4C3C4 /* JornalCoreData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E572C82323584531002F8A65 /* JornalCoreData 2.xcdatamodel */,
 				E57C8C222355371500E4C3C4 /* JornalCoreData.xcdatamodel */,
 			);
 			currentVersion = E57C8C222355371500E4C3C4 /* JornalCoreData.xcdatamodel */;

@@ -11,19 +11,19 @@ import CoreData
 
 class EntryController {
     
+//    MARK: - 
+    
+//    let moc = CoreDataStack.shared.mainContext
+    let baseURL: URL = URL(string: "https://lambda-ios-journal.firebaseio.com/")!
+    
+    init() {
+        fetchedEntriesFromServer()
+    }
+    
     
     
     var entries: [Entry] {
         return self.loadFromPersistentStore()
-    }
-        
-    func saveToPersistentStore() {
-        do {
-            let moc = CoreDataStack.shared.mainContext
-            try moc.save()
-        } catch {
-            print("Error saving: \(error)")
-        }
     }
 
     func loadFromPersistentStore() -> [Entry] {
@@ -39,21 +39,44 @@ class EntryController {
         }
     }
     
-    func createEntry(title: String, bodyText: String, mood: String) {
-        let _ = Entry(title: title, bodyText: bodyText, mood: mood)
-        saveToPersistentStore()
+    func createEntry(title: String, bodyText: String, mood: Moods, context: NSManagedObjectContext = CoreDataStack.shared.mainContext) {
+        let entry = Entry(title: title, bodyText: bodyText, identifier: UUID().uuidString, mood: mood)
+        context.perform {
+            do {
+                try CoreDataStack.shared.save(context: context)
+            } catch {
+                print("Unable to save new entry: \(error)")
+                context.reset()
+            }
+        }
+        put(entry: entry)
     }
     
-    func updateEntry(title: String, bodyText: String, mood: String, entry: Entry) {
-    
-        entry.title = title
+    func update(entry: Entry, mood: String, title: String, bodyText: String, timestamp: Date = Date()) {
         entry.bodyText = bodyText
-        entry.timestamp = Date()
         entry.mood = mood
-        saveToPersistentStore()
+        entry.timestamp = timestamp
+        entry.title = title
+    
+        do {
+            let moc = CoreDataStack.shared.mainContext
+            try moc.save()
+            self.put(entry: entry)
+        } catch {
+            print("Error saving managed object contect")
+        }
+    }
+    
+    func updateEntry(entry: Entry, with representation: JournalEntryRepresentation) {
+        entry.mood = representation.mood
+        entry.title = representation.title
+        entry.bodyText = representation.bodyText
+        entry.timestamp = representation.timestamp
     }
     
     func deletedEntry(entry: Entry) {
+        
+        self.deletedEntry(entry: entry)
         let moc = CoreDataStack.shared.mainContext
         moc.delete(entry)
         
@@ -64,5 +87,95 @@ class EntryController {
             print("Error deleting entry: \(error)")
         }
     }
+//    MARK: Server Methods
     
+    func put(entry: Entry, completionClosure: @escaping () -> Void =  { }) {
+//       create identifier if it doesnt exsist
+        let uuid = entry.identifier ?? UUID().uuidString
+        
+//        let uuid = entry.identifier ?? UUID()
+//        set identifier to both entry and representation in case we just created it
+//        entry.identifier = uuid
+//        respresentation.identifier = uuid
+//        save changes to persisitent store
+//        saveToPersistentStore()
+//
+        let requestURL = baseURL.appendingPathComponent(uuid.uuidString)
+        .appendingPathComponent("json")
+        var request = URLRequest(url: requestURL)
+        request.httpMethod = "PUT"
+        
+        do {
+            guard var representation = entry.representation else {
+                completionClosure()
+                return
+            }
+            representation.identifier = uuid.uuidString
+            entry.identifier = uuid
+       
+            try CoreDataStack.shared.save()
+            
+            request.httpBody = try JSONEncoder().encode(representation)
+        } catch {
+            NSLog("Error enoding entry \(entry): \(error)")
+            completionClosure()
+            return
+        }
+        
+        URLSession.shared.dataTask(with: request) { (data, _, error) in
+            if let error = error {
+                print("error PUTting entry to server: \(error)")
+                completionClosure()
+                return
+            }
+        completionClosure()
+        }.resume()
+    }
+
+func deleteFromServer(entry: Entry, completionClosure: @escaping (Error?) -> Void = { _ in}) {
+    let uuid = entry.identifier!.uuidString
+    let requestURL = baseURL.appendingPathComponent(uuid)
+        .appendingPathExtension("json")
+    
+    var request = URLRequest(url: requestURL)
+    request.httpMethod = "DELETE"
+    
+    URLSession.shared.dataTask(with: request) { (_, result, error) in
+        if let error = error {
+            print("Error DELETEing from server: \(error)")
+            completionClosure(error)
+            return
+        }
+           completionClosure(error)
+    }.resume()
+}
+func fetchedEntriesFromServer(completionClosure: @escaping (Error?) -> Void = { _ in }) {
+    let requestURL = baseURL.appendingPathExtension("json")
+    
+    URLSession.shared.dataTask(with: requestURL) { (data,_, error) in
+        if let error = error {
+        print("no data returned by data task")
+        completionClosure(nil)
+        return
+    }
+        guard let data = data else {
+            print("Error fetching entries: \(error)")
+            completionClosure(error)
+            return
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            let dictionaryOfEntries = try decoder.decode([String: JournalEntryRepresentation].self, from: data)
+            let representation = Array(dictionaryOfEntries.values)
+            try self.updateEntry(with: representation)
+            completionClosure(nil)
+        } catch {
+            print("Error decoding entry representations: \(error)")
+            completionClosure(error)
+            return
+}
+}.resume()
+}
+
 }
