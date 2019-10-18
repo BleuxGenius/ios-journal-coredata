@@ -11,17 +11,15 @@ import CoreData
 
 class EntryController {
     
-//    MARK: - 
+//    MARK: - Properties
     
 //    let moc = CoreDataStack.shared.mainContext
     let baseURL: URL = URL(string: "https://lambda-ios-journal.firebaseio.com/")!
     
     init() {
-        fetchedEntriesFromServer()
+        self.fetchedEntriesFromServer()
     }
-    
-    
-    
+  
     var entries: [Entry] {
         return self.loadFromPersistentStore()
     }
@@ -40,7 +38,7 @@ class EntryController {
     }
     
     func createEntry(title: String, bodyText: String, mood: Moods, context: NSManagedObjectContext = CoreDataStack.shared.mainContext) {
-        let entry = Entry(title: title, bodyText: bodyText, identifier: UUID().uuidString, mood: mood)
+        let entry = Entry(title: title, bodyText: bodyText, identifier: UUID().uuidString, mood: mood.moodStringValue)
         context.perform {
             do {
                 try CoreDataStack.shared.save(context: context)
@@ -100,7 +98,7 @@ class EntryController {
 //        save changes to persisitent store
 //        saveToPersistentStore()
 //
-        let requestURL = baseURL.appendingPathComponent(uuid.uuidString)
+        let requestURL = baseURL.appendingPathComponent(UUID().uuidString)
         .appendingPathComponent("json")
         var request = URLRequest(url: requestURL)
         request.httpMethod = "PUT"
@@ -110,7 +108,8 @@ class EntryController {
                 completionClosure()
                 return
             }
-            representation.identifier = uuid.uuidString
+            representation.identifier = UUID().uuidString
+            
             entry.identifier = uuid
        
             try CoreDataStack.shared.save()
@@ -133,7 +132,7 @@ class EntryController {
     }
 
 func deleteFromServer(entry: Entry, completionClosure: @escaping (Error?) -> Void = { _ in}) {
-    let uuid = entry.identifier!.uuidString
+    let uuid = UUID().uuidString
     let requestURL = baseURL.appendingPathComponent(uuid)
         .appendingPathExtension("json")
     
@@ -168,7 +167,7 @@ func fetchedEntriesFromServer(completionClosure: @escaping (Error?) -> Void = { 
             let decoder = JSONDecoder()
             let dictionaryOfEntries = try decoder.decode([String: JournalEntryRepresentation].self, from: data)
             let representation = Array(dictionaryOfEntries.values)
-            try self.updateEntry(with: representation)
+            try self.updateEntry(entry: entries.self, with: representation)
             completionClosure(nil)
         } catch {
             print("Error decoding entry representations: \(error)")
